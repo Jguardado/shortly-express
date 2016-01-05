@@ -249,7 +249,7 @@ xdescribe('Privileged Access:', function(){
 
 }); // 'Priviledged Access'
 
- describe('Account Creation:', function(){
+xdescribe('Account Creation:', function(){
 
   it('Signup creates a user record', function(done) {
     var options = {
@@ -297,7 +297,7 @@ xdescribe('Privileged Access:', function(){
 
 }); // 'Account Creation'
 
-xdescribe('Account Login:', function(){
+describe('Account Login:', function(){
 
   var requestWithSession = request.defaults({jar: true});
 

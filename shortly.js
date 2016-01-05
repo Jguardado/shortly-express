@@ -4,6 +4,7 @@ var partials = require('express-partials');
 var bodyParser = require('body-parser');
 var cookieParser = require('cookie-parser');
 var session = require('express-session');
+var knex = require('knex');
 
 var db = require('./app/config');
 var Users = require('./app/collections/users');
@@ -116,13 +117,28 @@ app.post('/signup', function (req, res){
       username: user,
       password: password
     });
-    console.log(user);
+    //console.log(user);
 
     user.save().then(function(newUser) {
       // Users.add(newUser);
       res.send(200, newUser);
     });
 
+    //
+    res.redirect('/');
+
+});
+
+app.post('/login', function (req, res){
+ new User(req.body).fetch()
+ .then( function( found ) {
+    if ( found ) {
+      res.redirect( '/' );
+    } else {
+      res.redirect( '/login' );
+    }
+  });
+  
 })
 
 
