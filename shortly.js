@@ -112,34 +112,41 @@ app.post('/signup', function (req, res){
     var user = req.body.username;
     var password = req.body.password;
   
-    //console.log(req.body.username);
-  var user = new User({
+  var newUser = new User({
       username: user,
       password: password
-    });
-    //console.log(user);
+    }).save()
+      .then(function(attr) {
+        Users.add(attr);
+        res.send(200, attr);
+      });
 
-    user.save().then(function(newUser) {
-      // Users.add(newUser);
-      res.send(200, newUser);
-    });
-
-    //
+    req.session.User = user;
     res.redirect('/');
 
 });
 
 app.post('/login', function (req, res){
- new User(req.body).fetch()
- .then( function( found ) {
-    if ( found ) {
-      res.redirect( '/' );
-    } else {
-      res.redirect( '/login' );
-    }
-  });
+  var user = req.body.username;
+
+  new User({'username': user}).fetch()
+   .then( function( found ) {
+    console.log( found )
+      if ( found ) {
+        req.session.User = user;
+        res.redirect('/');
+      } else {
+        res.redirect( '/login' );
+      }
+    });
   
-})
+});
+
+app.get('/logout', function (req, res){
+    req.session.destroy(function(){
+        res.redirect('/');
+    });
+});
 
 
 /************************************************************/
